@@ -3,6 +3,7 @@ package com.example.munanmunan;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.vpPager);
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
         viewPager.setCurrentItem(1);
+
 
     }
 }
