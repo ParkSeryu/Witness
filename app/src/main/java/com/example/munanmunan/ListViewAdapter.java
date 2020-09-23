@@ -13,14 +13,13 @@ import androidx.fragment.app.FragmentActivity;
 import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter {
+    // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
+    private ArrayList<AnniversaryListViewItem> listViewItemList = new ArrayList<AnniversaryListViewItem>();
 
-   private ArrayList<AnniversaryListViewItem> listViewItemList = new ArrayList<AnniversaryListViewItem>();
-
-   //ListViewAdapter의 생성자
-   public ListViewAdapter(){
+    //ListViewAdapter의 생성자
+    public ListViewAdapter() {
 
     }
-
 
     @Override
     public int getCount() {
@@ -39,8 +38,8 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-       final int pos = position;
-       final Context context = parent.getContext();
+        final int pos = position;
+        final Context context = parent.getContext();
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -57,9 +56,8 @@ public class ListViewAdapter extends BaseAdapter {
         whenDay.setText(anniversaryListViewItem.getWhenDay());
         dDay.setText(anniversaryListViewItem.getdDay());
 
-       return convertView;
+        return convertView;
     }
-
 
     public void addItem(String remainDay, String whenDay, String dDay) {
         AnniversaryListViewItem item = new AnniversaryListViewItem();
