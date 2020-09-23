@@ -9,7 +9,15 @@
     </style>
 
     <style name ="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar">
+<<<<<<< HEAD
         <item name="android:windowBackground">@drawable/ic_launcher_background</item>
+=======
+<<<<<<< HEAD
+        <item name="android:windowBackground">@drawable/ic_menu_gallery</item>
+=======
+        <item name="android:windowBackground">@drawable/temp_1</item>
+>>>>>>> 47a61f5755e14a40d32c0a798b3cdc6894e7c2f6
+>>>>>>> db0682ae09987c2989f376dbdb73c470d8f83374
     </style>
 
 

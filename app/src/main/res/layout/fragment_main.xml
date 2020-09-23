@@ -38,12 +38,21 @@
 
     <ListView
         android:id="@+id/listView_upcoming"
+<<<<<<< HEAD
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline_Middle" />
+=======
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/guideline_Middle"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+>>>>>>> db0682ae09987c2989f376dbdb73c470d8f83374
 
 
     <androidx.constraintlayout.widget.Guideline
