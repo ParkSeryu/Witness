@@ -1,6 +1,7 @@
 package com.example.munanmunan;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class BucketListViewAdapter extends BaseAdapter {
-
+    int flag = 0;
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
     private ArrayList<BucketListViewItem> listViewItemList = new ArrayList<BucketListViewItem>();
+    private DialogBucketList dialogBucketList;
 
     //ListViewAdapter의 생성자
     public BucketListViewAdapter() {
@@ -54,17 +56,33 @@ public class BucketListViewAdapter extends BaseAdapter {
         BucketListModifiedView.setImageDrawable(bucketListViewItem.getBucketListModified());
         BucketListDeleteView.setImageDrawable(bucketListViewItem.getBucketListDelete());
 
+        BucketListContentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flag == 0) {
+                    BucketListContentView.setPaintFlags(BucketListContentView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    flag = 1;
+                } else {
+                    BucketListContentView.setPaintFlags(0);
+                    flag = 0;
+                }
+
+            }
+        });
+
         BucketListModifiedView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BucketListContentView.setText("수정");
+                dialogBucketList = new DialogBucketList(context);
+                dialogBucketList.setCancelable(false);
+                dialogBucketList.show();
             }
         });
 
         BucketListDeleteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BucketListContentView.setText("삭제");
+                BucketListContentView.setText("d에에에에");
             }
         });
 

@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainFragment.buttonClick {
     ViewPager viewPager;
 
     @Override
@@ -32,14 +32,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         viewPager = findViewById(R.id.vpPager);
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
         viewPager.setCurrentItem(1);
+    }
 
-
-
-
+    public void buttonClicked(View v) {
+        viewPager.setCurrentItem(0);
     }
 }
