@@ -8,12 +8,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-public class DialogSelectDay extends Dialog implements View.OnClickListener {
+public class DialogMainDay extends Dialog implements View.OnClickListener {
     private Context mContext;
     private TextView btn_cancel;
     private TextView btn_ok;
 
-    public DialogSelectDay(@NonNull Context context){
+    public DialogMainDay(@NonNull Context context){
         super(context);
         mContext = context;
     }

@@ -1,3 +1,4 @@
+/*
 package com.example.munanmunan;
 
 import android.content.Context;
@@ -9,18 +10,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class BucketListViewAdapter extends BaseAdapter {
+public class ListViewAdapterBucketList extends BaseAdapter {
     int flag = 0;
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
-    private ArrayList<BucketListViewItem> listViewItemList = new ArrayList<BucketListViewItem>();
+    private ArrayList<BucketListItem> listViewItemList = new ArrayList<BucketListItem>();
     private DialogBucketList dialogBucketList;
 
     //ListViewAdapter의 생성자
-    public BucketListViewAdapter() {
+    public ListViewAdapterBucketList() {
 
     }
 
@@ -39,7 +39,7 @@ public class BucketListViewAdapter extends BaseAdapter {
         // listview_item Layout을 inflate하여 convertview 참조 획득
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.bucketlist_listview_item, parent, false);
+            convertView = inflater.inflate(R.layout.recyclerview_bucketlist_item, parent, false);
         }
 
         // 화면에 표시될 View(Layout이 inflate된) 으로부터 위젯에 대한 참조 획득
@@ -49,12 +49,12 @@ public class BucketListViewAdapter extends BaseAdapter {
 
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        BucketListViewItem bucketListViewItem = listViewItemList.get(position);
+        BucketListItem bucketListItem = listViewItemList.get(position);
 
         //아이템 내 각 위젯에 데이터 반영
-        BucketListContentView.setText(bucketListViewItem.getBucketListContent());
-        BucketListModifiedView.setImageDrawable(bucketListViewItem.getBucketListModified());
-        BucketListDeleteView.setImageDrawable(bucketListViewItem.getBucketListDelete());
+        BucketListContentView.setText(bucketListItem.getBucketListContent());
+        BucketListModifiedView.setImageDrawable(bucketListItem.getBucketListModified());
+        BucketListDeleteView.setImageDrawable(bucketListItem.getBucketListDelete());
 
         BucketListContentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,13 +103,14 @@ public class BucketListViewAdapter extends BaseAdapter {
 
     // 아이템 데이터 추가를 위한 함수, 개발자가 원하는대로 작성 가능
     public void addItem(String content, Drawable modifiedImage, Drawable deleteImage) {
-        BucketListViewItem bucketListViewItem = new BucketListViewItem();
-        bucketListViewItem.setBucketListContent(content);
-        bucketListViewItem.setBucketListModified(modifiedImage);
-        bucketListViewItem.setBucketListDelete(deleteImage);
+        BucketListItem bucketListItem = new BucketListItem();
+        bucketListItem.setBucketListContent(content);
+        bucketListItem.setBucketListModified(modifiedImage);
+        bucketListItem.setBucketListDelete(deleteImage);
 
-        listViewItemList.add(bucketListViewItem);
+        listViewItemList.add(bucketListItem);
     }
 
 
 }
+*/

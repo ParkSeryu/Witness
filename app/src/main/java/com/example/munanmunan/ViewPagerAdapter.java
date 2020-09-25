@@ -16,9 +16,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         // 각 포지션 값이 들어오면 미리 구현한 프래그먼트를 열어주는 함수.
         switch (position) {
             case 0:
-                return new BucketListFragment();
+                return new FragmentBucketList();
             case 1:
-                return new MainFragment();
+                return new FragmentMain();
         }
         return null;
     }

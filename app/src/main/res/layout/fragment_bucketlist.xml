@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBasic"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,25 +10,35 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/border"
+        android:background="@drawable/toolbar_border"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="16dp">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/toolbarText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bucket List"
-                android:textColor="#000000"
-                android:textSize="20sp"
+                android:text="@string/bucket_list"
+                android:fontFamily="@font/font_ink_liquid"
+                android:textColor="@color/colorBlack"
+                android:textSize="30sp"
                 app:layout_constraintLeft_toLeftOf="@id/guideline_Center"
                 app:layout_constraintTop_toBottomOf="@id/guideline_horizontal" />
+
+            <ImageButton
+                android:id="@+id/btnGoCalendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_calendar"
+                android:layout_marginEnd="25dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline_horizontal" />
 
 
             <androidx.constraintlayout.widget.Guideline
@@ -65,15 +76,15 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_day" />
+        app:srcCompat="@drawable/ic_plus" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

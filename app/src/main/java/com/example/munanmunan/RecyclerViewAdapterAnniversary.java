@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapterAnniversary extends RecyclerView.Adapter<RecyclerViewAdapterAnniversary.ViewHolder> {
 
-    private ArrayList<AnniversaryListViewItem> AnniverSaryData = null;
+    private ArrayList<AnniversaryListItem> AnniverSaryData = null;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -33,7 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     //생성자에서 데이터 리스트 객체를 전달받음.
-    RecyclerViewAdapter(ArrayList<AnniversaryListViewItem> list){
+    RecyclerViewAdapterAnniversary(ArrayList<AnniversaryListItem> list){
         AnniverSaryData = list;
     }
 
@@ -45,15 +45,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.recyclerview_anniversary_item, parent, false);
-        RecyclerViewAdapter.ViewHolder vh = new RecyclerViewAdapter.ViewHolder(view);
+        RecyclerViewAdapterAnniversary.ViewHolder vh = new RecyclerViewAdapterAnniversary.ViewHolder(view);
 
         return vh;
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
-        AnniversaryListViewItem item = AnniverSaryData.get(position);
+    public void onBindViewHolder(@NonNull RecyclerViewAdapterAnniversary.ViewHolder holder, int position) {
+        AnniversaryListItem item = AnniverSaryData.get(position);
 
         holder.tvRemainDay.setText(item.getRemainDay());
         holder.tvWhenDay.setText(item.getWhenDay());

@@ -2,7 +2,7 @@ package com.example.munanmunan;
 
 import android.graphics.drawable.Drawable;
 
-public class BucketListViewItem {
+public class BucketListItem {
 
     private String bucketListContent;
     private Drawable bucketListModified;

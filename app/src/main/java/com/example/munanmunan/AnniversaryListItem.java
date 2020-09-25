@@ -1,6 +1,6 @@
 package com.example.munanmunan;
 
-public class AnniversaryListViewItem {
+public class AnniversaryListItem {
     private String remainDay;
     private String whenDay;
     private String Dday;

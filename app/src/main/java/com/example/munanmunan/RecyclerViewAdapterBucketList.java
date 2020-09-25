@@ -11,12 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class RecyclerViewAdapter_BucketList extends RecyclerView.Adapter<RecyclerViewAdapter_BucketList.ViewHolder> {
+public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<RecyclerViewAdapterBucketList.ViewHolder> {
     Context context;
-    private ArrayList<BucketListViewItem> BucketListData = null;
+    private ArrayList<BucketListItem> BucketListData = null;
     private DialogBucketList dialogBucketList;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
@@ -50,19 +49,11 @@ public class RecyclerViewAdapter_BucketList extends RecyclerView.Adapter<Recycle
                 }
             });
 
-            BucketListModified.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialogBucketList = new DialogBucketList(context);
-                    dialogBucketList.setCancelable(false);
-                    dialogBucketList.show();
-                }
-            });
 
         }
     }
     //생성자에서 데이터 리스트 객체를 전달받음.
-    RecyclerViewAdapter_BucketList(ArrayList<BucketListViewItem> list) { BucketListData = list; }
+    RecyclerViewAdapterBucketList(ArrayList<BucketListItem> list) { BucketListData = list; }
 
     //onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴
     @NonNull
@@ -71,19 +62,30 @@ public class RecyclerViewAdapter_BucketList extends RecyclerView.Adapter<Recycle
         context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.bucketlist_listview_item, parent, false);
-        RecyclerViewAdapter_BucketList.ViewHolder vh = new RecyclerViewAdapter_BucketList.ViewHolder(view);
+        View view = inflater.inflate(R.layout.recyclerview_bucketlist_item, parent, false);
+        RecyclerViewAdapterBucketList.ViewHolder vh = new RecyclerViewAdapterBucketList.ViewHolder(view);
         return vh;
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        BucketListViewItem item = BucketListData.get(position);
+        BucketListItem item = BucketListData.get(position);
 
         holder.BucketListContent.setText(item.getBucketListContent());
         holder.BucketListModified.setImageDrawable(item.getBucketListModified());
         holder.BucketListDeleted.setImageDrawable(item.getBucketListDelete());
+
+        holder.BucketListModified.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogBucketList.flag = 1;
+                dialogBucketList = new DialogBucketList(context);
+                dialogBucketList.setCancelable(false);
+                dialogBucketList.show();
+            }
+        });
+
 
         holder.BucketListDeleted.setOnClickListener(new View.OnClickListener() {
             @Override

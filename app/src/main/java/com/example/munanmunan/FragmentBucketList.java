@@ -1,19 +1,16 @@
 package com.example.munanmunan;
 
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -24,13 +21,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class BucketListFragment extends Fragment {
+public class FragmentBucketList extends Fragment {
     RecyclerView mRecyclerView = null;
-    RecyclerViewAdapter_BucketList mAdapter = null;
-    ArrayList<BucketListViewItem> mList = new ArrayList<BucketListViewItem>();
+    RecyclerViewAdapterBucketList mAdapter = null;
+    ArrayList<BucketListItem> mList = new ArrayList<BucketListItem>();
     private DialogBucketList dialogBucketList;
+    private ImageButton btnGoCalendar;
 
-    public BucketListFragment() {
+
+    public FragmentBucketList() {
     }
 
     @Override
@@ -46,19 +45,28 @@ public class BucketListFragment extends Fragment {
         TextView toobarText = view.findViewById(R.id.toolbarText);
         toobarText.setText("Bucket List");
 
+        btnGoCalendar = view.findViewById(R.id.btnGoCalendar);
+        btnGoCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.flag = 0;
+                ((MainActivity)getActivity()).replaceFragment();
+            }
+        });
+
 
         mRecyclerView = view.findViewById(R.id.recyclerView_bucketList);
-        mAdapter = new RecyclerViewAdapter_BucketList(mList);
+        mAdapter = new RecyclerViewAdapterBucketList(mList);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), 1));
 
-        addItem("롯데월드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_camera), ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_gallery));
-        addItem("에버랜드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_camera), ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_gallery));
-        addItem("에버랜드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_camera), ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_gallery));
-        addItem("에버랜드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_camera), ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_gallery));
-        addItem("에버랜드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_camera), ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_gallery));
+        addItem("롯데월드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
+        addItem("에버랜드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
+        addItem("에버랜드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
+        addItem("에버랜드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
+        addItem("에버랜드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
 
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
@@ -88,7 +96,7 @@ public class BucketListFragment extends Fragment {
     }
 
     public void addItem(String content, Drawable modifisrc, Drawable deletesrc) {
-        BucketListViewItem item = new BucketListViewItem();
+        BucketListItem item = new BucketListItem();
 
         item.setBucketListContent(content);
         item.setBucketListModified(modifisrc);

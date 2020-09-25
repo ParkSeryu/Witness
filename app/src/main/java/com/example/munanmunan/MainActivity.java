@@ -2,30 +2,16 @@ package com.example.munanmunan;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.Menu;
-import android.widget.ListView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.buttonClick {
+public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
+    static int flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +21,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.butt
         viewPager = findViewById(R.id.vpPager);
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
         viewPager.setCurrentItem(1);
+
+      /*  //화면 전환 프래그먼트 선언 및 초기 화면 설정
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.ContentLayout, FragmentMain.newInstance()).commit();*/
+
     }
 
-    public void buttonClicked(View v) {
-        viewPager.setCurrentItem(0);
+    public void replaceFragment() {
+        if (flag == 1) {
+            viewPager.setCurrentItem(0);
+        } else
+            viewPager.setCurrentItem(1);
     }
+
+
 }

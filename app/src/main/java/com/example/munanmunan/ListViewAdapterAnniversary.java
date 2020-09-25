@@ -1,3 +1,4 @@
+/*
 package com.example.munanmunan;
 
 import android.content.Context;
@@ -8,16 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 
-import androidx.fragment.app.FragmentActivity;
-
 import java.util.ArrayList;
 
-public class ListViewAdapter extends BaseAdapter {
+public class ListViewAdapterAnniversary extends BaseAdapter {
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
-    private ArrayList<AnniversaryListViewItem> listViewItemList = new ArrayList<AnniversaryListViewItem>();
+    private ArrayList<AnniversaryListItem> listViewItemList = new ArrayList<AnniversaryListItem>();
 
     //ListViewAdapter의 생성자
-    public ListViewAdapter() {
+    public ListViewAdapterAnniversary() {
 
     }
 
@@ -50,17 +49,17 @@ public class ListViewAdapter extends BaseAdapter {
         TextView whenDay = convertView.findViewById(R.id.tvWhenDay);
         TextView dDay = convertView.findViewById(R.id.tvDday);
 
-        AnniversaryListViewItem anniversaryListViewItem = listViewItemList.get(position);
+        AnniversaryListItem anniversaryListItem = listViewItemList.get(position);
 
-        remainDay.setText(anniversaryListViewItem.getRemainDay());
-        whenDay.setText(anniversaryListViewItem.getWhenDay());
-        dDay.setText(anniversaryListViewItem.getdDay());
+        remainDay.setText(anniversaryListItem.getRemainDay());
+        whenDay.setText(anniversaryListItem.getWhenDay());
+        dDay.setText(anniversaryListItem.getdDay());
 
         return convertView;
     }
 
     public void addItem(String remainDay, String whenDay, String dDay) {
-        AnniversaryListViewItem item = new AnniversaryListViewItem();
+        AnniversaryListItem item = new AnniversaryListItem();
         item.setRemainDay(remainDay);
         item.setWhenDay(whenDay);
         item.setDday(dDay);
@@ -69,3 +68,4 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
 }
+*/
