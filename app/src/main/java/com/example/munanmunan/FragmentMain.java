@@ -1,12 +1,14 @@
 package com.example.munanmunan;
 
-import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,11 +21,17 @@ import java.util.ArrayList;
 
 public class FragmentMain extends Fragment {
 
+    // DB 관련
+    MyDBHelper myDBHelper;
+    SQLiteDatabase sqlDB;
+    // --db
+
     ImageButton btnGoBcl;
     TextView toolbarText, tvMainDay;
     ImageButton btnPlus;
-    private DialogMainDay dialogMainDay;
+    private DialogStartDay dialogStartDay;
     private DialogAddAnniv dialogAddAniv;
+
 
     // 리사이클러뷰에 표시할 데이터 리스트 생성.
     ArrayList<AnniversaryListItem> mList = new ArrayList<>();
@@ -40,6 +48,29 @@ public class FragmentMain extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        dialogStartDay = new DialogStartDay(getContext());
+        dialogStartDay.setCancelable(false);
+
+
+        myDBHelper = new MyDBHelper(getContext());
+        sqlDB = myDBHelper.getWritableDatabase();
+        Cursor cursor;
+        myDBHelper.onUpgrade(sqlDB,1, 2);
+        cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
+        String s = String.valueOf(cursor.getColumnCount());
+        if(cursor.getColumnCount() <= 1)
+        {
+            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+            dialogStartDay.show();
+        }
+        else
+        {
+            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+        }
+
+        cursor.close();
+        sqlDB.close();
+
 
         btnGoBcl = view.findViewById(R.id.goBcl);
         btnGoBcl.setOnClickListener(new View.OnClickListener() {
@@ -68,9 +99,7 @@ public class FragmentMain extends Fragment {
         tvMainDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogMainDay = new DialogMainDay(getContext());
-                dialogMainDay.setCancelable(false);
-                dialogMainDay.show();
+                dialogStartDay.show();
             }
         });
 
@@ -103,6 +132,8 @@ public class FragmentMain extends Fragment {
         return view;
 
     }
+
+
 
     public void addItem(String RemainDay, String WhenDay, String Dday) {
         AnniversaryListItem item = new AnniversaryListItem();

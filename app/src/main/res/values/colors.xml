@@ -10,6 +10,7 @@
     <color name="colorLightBlack">#2D2926</color>
     <color name="dialogColor">#FFDDDC</color>
     <color name="colorTemp">#F4EBE7</color>
+    <color name="colorHighLight">#FFAB00</color>
     <color name="textColorGray">#646464</color>
     <color name="dialogBottomColor">#424242</color>
 
