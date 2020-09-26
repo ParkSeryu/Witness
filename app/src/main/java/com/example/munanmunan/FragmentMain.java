@@ -29,7 +29,7 @@ public class FragmentMain extends Fragment {
     ImageButton btnGoBcl;
     TextView toolbarText, tvMainDay;
     ImageButton btnPlus;
-    private DialogStartDay dialogStartDay;
+    DialogStartDay dialogStartDay;
     private DialogAddAnniv dialogAddAniv;
 
 
