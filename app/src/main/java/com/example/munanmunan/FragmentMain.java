@@ -1,8 +1,10 @@
 package com.example.munanmunan;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class FragmentMain extends Fragment {
 
@@ -31,7 +38,13 @@ public class FragmentMain extends Fragment {
     ImageButton btnPlus;
     DialogStartDay dialogStartDay;
     private DialogAddAnniv dialogAddAniv;
-
+    private String sYear, sMonth, sDay;
+    private Calendar calendar;
+    private Date startDate, currentDate;
+    private String sStart, sCurrent;
+    private long calDateDays;
+    SimpleDateFormat simpleDateFormat;
+    int Day;
 
     // 리사이클러뷰에 표시할 데이터 리스트 생성.
     ArrayList<AnniversaryListItem> mList = new ArrayList<>();
@@ -42,23 +55,20 @@ public class FragmentMain extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
+        calendar = new GregorianCalendar();
+        simpleDateFormat = new SimpleDateFormat("yyyymmdd");
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
         dialogStartDay = new DialogStartDay(getContext());
         dialogStartDay.setCancelable(false);
-
 
         myDBHelper = new MyDBHelper(getContext());
         sqlDB = myDBHelper.getWritableDatabase();
         Cursor cursor;
-        myDBHelper.onUpgrade(sqlDB,1, 2);
+        //myDBHelper.onUpgrade(sqlDB, 0, 1); // 막 건들이지 말것. 위험
+
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
-        String s = String.valueOf(cursor.getColumnCount());
-        if(cursor.getColumnCount() <= 1)
+        String s = String.valueOf(cursor.getCount());
+        if(cursor.getCount() == 0)
         {
             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
             dialogStartDay.show();
@@ -66,10 +76,35 @@ public class FragmentMain extends Fragment {
         else
         {
             Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+            cursor.moveToLast();
+            sStart = cursor.getString(0);
+            sYear = String.valueOf(calendar.get(Calendar.YEAR));
+            sMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+            sDay = String.valueOf(calendar.get(Calendar.DATE)); // 객체 생성
+            sCurrent = sYear + sMonth + sDay;
+            Log.d("test",sStart + "/" + sCurrent);
+            try {
+                currentDate = simpleDateFormat.parse(sCurrent);
+                startDate = simpleDateFormat.parse(sStart);
+                Log.d("test3",""+currentDate +" / " + startDate);
+                long calDate = currentDate.getTime() - startDate.getTime();
+                calDateDays = calDate / (24 * 60 * 60 * 1000);
+                calDateDays = Math.abs(calDateDays);
+                Log.d("test2","답"+calDateDays);
+            }catch(ParseException e){Log.d("test2",""+calDateDays);}
         }
+
+
+
 
         cursor.close();
         sqlDB.close();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
 
 
         btnGoBcl = view.findViewById(R.id.goBcl);
@@ -80,7 +115,6 @@ public class FragmentMain extends Fragment {
                 ((MainActivity)getActivity()).replaceFragment();
             }
         });
-
 
         toolbarText = view.findViewById(R.id.toolbarText);
         toolbarText.setText("Witness");
@@ -103,17 +137,19 @@ public class FragmentMain extends Fragment {
             }
         });
 
+        //상단 날짜 지정
+        if(Day != 0) {
+            tvMainDay.setText(String.valueOf(calDateDays));
+        }
 
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
         RecyclerView recyclerView = view.findViewById(R.id.RecyclerView_upcoming);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), 1));
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
         RecyclerViewAdapterAnniversary recyclerViewAdapterAnniversary = new RecyclerViewAdapterAnniversary(mList);
         recyclerView.setAdapter(recyclerViewAdapterAnniversary);
-
 
         addItem("100일", "2020.03.04", "D-84");
         addItem("200일", "2020.02.27", "D-72");
@@ -130,7 +166,6 @@ public class FragmentMain extends Fragment {
 
         recyclerViewAdapterAnniversary.notifyDataSetChanged();
         return view;
-
     }
 
 

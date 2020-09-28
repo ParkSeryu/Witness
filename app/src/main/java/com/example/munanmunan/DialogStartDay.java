@@ -2,22 +2,32 @@ package com.example.munanmunan;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DialogStartDay extends Dialog implements View.OnClickListener {
     private Context mContext;
     DatePicker datePickerStartDay;
     private TextView btn_cancel;
     private TextView btn_ok;
+    private String Year, Month, Day;
+    MyDBHelper myDBHelper;
+    SQLiteDatabase sqlDB;
 
     public DialogStartDay(@NonNull Context context) {
         super(context);
@@ -28,6 +38,10 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_start_day);
+
+        myDBHelper = new MyDBHelper(getContext());
+        sqlDB = myDBHelper.getWritableDatabase();
+
 
         datePickerStartDay = findViewById(R.id.datePickerStartDay);
 
@@ -45,12 +59,25 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
                 dismiss();
                 break;
             case R.id.btn_ok:
-                String s = String.valueOf(datePickerStartDay.getYear());
-                String d = String.valueOf(datePickerStartDay.getMonth());
+                Year = String.valueOf(datePickerStartDay.getYear());
+                Month = String.valueOf(datePickerStartDay.getMonth() + 1);
+                Day = String.valueOf(datePickerStartDay.getDayOfMonth());
+                if(datePickerStartDay.getMonth() + 1 > 0 )
+                String Temp = String.valueOf(dYear) + String.valueOf(dMonth) + String.valueOf(dDay);
+                Cursor cursor;
+                cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
+                if(cursor.getCount() == 0)
+                {
+                    sqlDB.execSQL("insert into meetDay VALUES ('" + Temp +"');");
+                }
+                else
+                {
+                   sqlDB.execSQL("update meetDay set startDay = '" + Temp + "';");
+                }
 
-
-
-                Toast.makeText(mContext, s + d, Toast.LENGTH_SHORT).show();
+                cursor.close();
+                sqlDB.close();
+                dismiss();
                 break;
         }
     }
