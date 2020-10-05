@@ -44,6 +44,7 @@ public class FragmentMain extends Fragment {
     private Date startDate, currentDate;
     private String sStart, sCurrent;
     private long calDateDays;
+    static int dialogOk;
     SimpleDateFormat simpleDateFormat;
     int Day;
 
@@ -70,11 +71,15 @@ public class FragmentMain extends Fragment {
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
         String s = String.valueOf(cursor.getCount());
         if (cursor.getCount() == 0) {
-            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-            dialogStartDay.setOnShowListener(new DialogInterface.OnShowListener() {
+            dialogStartDay.show();
+            dialogStartDay.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
-                public void onShow(DialogInterface dialog) {
-                    dialogStartDay.show();
+                public void onDismiss(DialogInterface dialog) {
+                    if(dialogOk == 1)
+                    {
+
+                        datePickerSetDate();
+                    }
                 }
             });
         } else {
@@ -142,6 +147,12 @@ public class FragmentMain extends Fragment {
             @Override
             public void onClick(View v) {
                 dialogStartDay.show();
+                dialogStartDay.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Toast.makeText(getContext(), "eeeee", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -182,6 +193,9 @@ public class FragmentMain extends Fragment {
         item.setDday(Dday);
 
         mList.add(item);
+    }
+
+    private void datePickerSetDate(){
 
     }
 }
