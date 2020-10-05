@@ -32,6 +32,7 @@ public class FragmentMain extends Fragment {
     // DB 관련
     MyDBHelper myDBHelper;
     SQLiteDatabase sqlDB;
+    Cursor cursor;
     // --db
 
     ImageButton btnGoBcl;
@@ -65,53 +66,29 @@ public class FragmentMain extends Fragment {
 
         myDBHelper = new MyDBHelper(getContext());
         sqlDB = myDBHelper.getWritableDatabase();
-        Cursor cursor;
         //myDBHelper.onUpgrade(sqlDB, 0, 1); // 막 건들이지 말것. 위험
 
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
-        String s = String.valueOf(cursor.getCount());
+        // String s = String.valueOf(cursor.getCount());
         if (cursor.getCount() == 0) {
             dialogStartDay.show();
             dialogStartDay.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    if(dialogOk == 1)
-                    {
-
+                    if (dialogOk == 1) {
+                        sqlDB.execSQL("insert into meetDay VALUES ('" + DialogStartDay.TempSaveDay + "');");
                         datePickerSetDate();
+                        dialogOk = 0;
                     }
                 }
             });
         } else {
-            Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
-            cursor.moveToLast();
-            sStart = cursor.getString(0);
-            sYear = String.valueOf(calendar.get(Calendar.YEAR));
-            if ((calendar.get(Calendar.MONTH) + 1) < 10) {
-                sMonth = "0" + String.valueOf(calendar.get(Calendar.MONTH) + 1);
-            } else
-                sMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-
-            if ((calendar.get(Calendar.DATE)) < 10) {
-                sDay = "0" + String.valueOf(calendar.get(Calendar.DATE)); // 객체 생성
-            } else
-                sDay = String.valueOf(calendar.get(Calendar.DATE));
-
-            sCurrent = sYear + sMonth + sDay;
-            Log.d("test", sStart + "/" + sCurrent);
-            try {
-                currentDate = simpleDateFormat.parse(sCurrent);
-                startDate = simpleDateFormat.parse(sStart);
-                long calDate = currentDate.getTime() - startDate.getTime();
-                calDateDays = calDate / (24 * 60 * 60 * 1000);
-                calDateDays = Math.abs(calDateDays);
-            } catch (ParseException e) {
-                Log.d("exception test", "" + calDateDays);
+            if (dialogOk == 1) {
+                sqlDB.execSQL("update meetDay set startDay = '" + DialogStartDay.TempSaveDay + "';");
+                dialogOk = 0;
             }
+            datePickerSetDate();
         }
-
-        cursor.close();
-        sqlDB.close();
     }
 
     @Nullable
@@ -150,14 +127,16 @@ public class FragmentMain extends Fragment {
                 dialogStartDay.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        Toast.makeText(getContext(), "eeeee", Toast.LENGTH_SHORT).show();
+                        if(dialogOk == 1){
+                        datePickerSetDate();
+                        dialogOk = 0;
+                        }
+
                     }
                 });
             }
         });
 
-
-            tvMainDay.setText(calDateDays + "일");
 
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
         RecyclerView recyclerView = view.findViewById(R.id.RecyclerView_upcoming);
@@ -195,7 +174,34 @@ public class FragmentMain extends Fragment {
         mList.add(item);
     }
 
-    private void datePickerSetDate(){
+    private void datePickerSetDate() {
+        cursor.moveToLast();
+        sStart = cursor.getString(0);
+        sYear = String.valueOf(calendar.get(Calendar.YEAR));
+        if ((calendar.get(Calendar.MONTH) + 1) < 10) {
+            sMonth = "0" + String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        } else
+            sMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
 
+        if ((calendar.get(Calendar.DATE)) < 10) {
+            sDay = "0" + String.valueOf(calendar.get(Calendar.DATE)); // 객체 생성
+        } else
+            sDay = String.valueOf(calendar.get(Calendar.DATE));
+
+        sCurrent = sYear + sMonth + sDay;
+        Log.d("test", sStart + "/" + sCurrent);
+        try {
+            currentDate = simpleDateFormat.parse(sCurrent);
+            startDate = simpleDateFormat.parse(sStart);
+            long calDate = currentDate.getTime() - startDate.getTime();
+            calDateDays = calDate / (24 * 60 * 60 * 1000);
+            calDateDays = Math.abs(calDateDays);
+        } catch (ParseException e) {
+            Log.d("exception test", "" + calDateDays);
+        }
+        tvMainDay.setText(calDateDays + "일");
+        cursor.close();
+        sqlDB.close();
     }
+
 }

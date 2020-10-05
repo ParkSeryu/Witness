@@ -26,7 +26,7 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
     private TextView btn_cancel;
     private TextView btn_ok;
     private String Year, Month, Day;
-    public static String dialogStartDay;
+    public static String TempSaveDay;
     MyDBHelper myDBHelper;
     SQLiteDatabase sqlDB;
 
@@ -71,18 +71,8 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
                 } else {
                     Day = String.valueOf(datePickerStartDay.getDayOfMonth());
                 }
-                dialogStartDay = Year + Month + Day;
-
-                Cursor cursor;
-                cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
-                if (cursor.getCount() == 0) {
-                    sqlDB.execSQL("insert into meetDay VALUES ('" + dialogStartDay + "');");
-                } else {
-                    sqlDB.execSQL("update meetDay set startDay = '" + dialogStartDay + "';");
-                }
-
-                cursor.close();
-                sqlDB.close();
+                TempSaveDay = Year + Month + Day;
+                FragmentMain.dialogOk = 1;
                 dismiss();
                 break;
         }
