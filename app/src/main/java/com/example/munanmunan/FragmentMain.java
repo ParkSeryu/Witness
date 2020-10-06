@@ -47,7 +47,6 @@ public class FragmentMain extends Fragment {
     private long calDateDays;
     static int dialogOk;
     SimpleDateFormat simpleDateFormat;
-    int Day;
 
     // 리사이클러뷰에 표시할 데이터 리스트 생성.
     ArrayList<AnniversaryListItem> mList = new ArrayList<>();
@@ -58,44 +57,13 @@ public class FragmentMain extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        calendar = new GregorianCalendar();
-        simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
 
-        dialogStartDay = new DialogStartDay(getContext());
-        dialogStartDay.setCancelable(false);
-
-        myDBHelper = new MyDBHelper(getContext());
-        sqlDB = myDBHelper.getWritableDatabase();
-        //myDBHelper.onUpgrade(sqlDB, 0, 1); // 막 건들이지 말것. 위험
-
-        cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
-        // String s = String.valueOf(cursor.getCount());
-        if (cursor.getCount() == 0) {
-            dialogStartDay.show();
-            dialogStartDay.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    if (dialogOk == 1) {
-                        sqlDB.execSQL("insert into meetDay VALUES ('" + DialogStartDay.TempSaveDay + "');");
-                        datePickerSetDate();
-                        dialogOk = 0;
-                    }
-                }
-            });
-        } else {
-            if (dialogOk == 1) {
-                sqlDB.execSQL("update meetDay set startDay = '" + DialogStartDay.TempSaveDay + "';");
-                dialogOk = 0;
-            }
-            datePickerSetDate();
-        }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-
 
         btnGoBcl = view.findViewById(R.id.goBcl);
         btnGoBcl.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +88,34 @@ public class FragmentMain extends Fragment {
         });
 
         tvMainDay = view.findViewById(R.id.tvMainDay);
+
+        calendar = new GregorianCalendar();
+        simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+
+        dialogStartDay = new DialogStartDay(getContext());
+        dialogStartDay.setCancelable(false);
+
+        myDBHelper = new MyDBHelper(getContext());
+        sqlDB = myDBHelper.getWritableDatabase();
+        //myDBHelper.onUpgrade(sqlDB, 0, 1); // 막 건들이지 말것. 위험
+
+        cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
+        if (cursor.getCount() == 0) {
+            dialogStartDay.show();
+            dialogStartDay.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    if (dialogOk == 1) {
+                        sqlDB.execSQL("insert into meetDay VALUES ('" + DialogStartDay.TempSaveDay + "');");
+                        datePickerSetDate();
+                        dialogOk = 0;
+                    }
+                }
+            });
+        } else {
+                datePickerSetDate();
+            }
+
         tvMainDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,9 +123,18 @@ public class FragmentMain extends Fragment {
                 dialogStartDay.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        if(dialogOk == 1){
-                        datePickerSetDate();
-                        dialogOk = 0;
+                        sqlDB = myDBHelper.getWritableDatabase();
+                        cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
+
+                        if (dialogOk == 1 && cursor.getCount() == 0) {
+                            sqlDB.execSQL("insert into meetDay VALUES ('" + DialogStartDay.TempSaveDay + "');");
+                            datePickerSetDate();
+                            dialogOk = 0;
+                        }
+                        else if (dialogOk == 1 && cursor.getCount() > 0)
+                        {
+                            sqlDB.execSQL("update meetDay set startDay = '" + DialogStartDay.TempSaveDay + "';");
+                            datePickerSetDate();
                         }
 
                     }
@@ -157,7 +162,7 @@ public class FragmentMain extends Fragment {
         addItem("800일", "2020.02.27", "D-72");
         addItem("900일", "2020.02.27", "D-72");
         addItem("1000일", "2020.02.27", "D-72");
-        addItem("110일", "2020.02.27", "D-72");
+        addItem("1100일", "2020.02.27", "D-72");
         addItem("1200일", "2020.02.27", "D-72");
 
         recyclerViewAdapterAnniversary.notifyDataSetChanged();
@@ -175,16 +180,17 @@ public class FragmentMain extends Fragment {
     }
 
     private void datePickerSetDate() {
+        cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
         cursor.moveToLast();
         sStart = cursor.getString(0);
         sYear = String.valueOf(calendar.get(Calendar.YEAR));
         if ((calendar.get(Calendar.MONTH) + 1) < 10) {
-            sMonth = "0" + String.valueOf(calendar.get(Calendar.MONTH) + 1);
+            sMonth = "0" + calendar.get(Calendar.MONTH) + 1;
         } else
             sMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
 
         if ((calendar.get(Calendar.DATE)) < 10) {
-            sDay = "0" + String.valueOf(calendar.get(Calendar.DATE)); // 객체 생성
+            sDay = "0" + calendar.get(Calendar.DATE); // 객체 생성
         } else
             sDay = String.valueOf(calendar.get(Calendar.DATE));
 
@@ -194,8 +200,11 @@ public class FragmentMain extends Fragment {
             currentDate = simpleDateFormat.parse(sCurrent);
             startDate = simpleDateFormat.parse(sStart);
             long calDate = currentDate.getTime() - startDate.getTime();
+
             calDateDays = calDate / (24 * 60 * 60 * 1000);
             calDateDays = Math.abs(calDateDays);
+            Log.d("test1", calDateDays + "");
+            calDateDays += 1 ;
         } catch (ParseException e) {
             Log.d("exception test", "" + calDateDays);
         }

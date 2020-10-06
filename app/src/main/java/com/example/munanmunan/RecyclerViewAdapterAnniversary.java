@@ -67,3 +67,4 @@ public class RecyclerViewAdapterAnniversary extends RecyclerView.Adapter<Recycle
         return AnniverSaryData.size();
     }
 }
+

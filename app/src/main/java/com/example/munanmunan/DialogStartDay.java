@@ -26,6 +26,7 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
     private TextView btn_cancel;
     private TextView btn_ok;
     private String Year, Month, Day;
+    private Calendar calendar;
     public static String TempSaveDay;
     MyDBHelper myDBHelper;
     SQLiteDatabase sqlDB;
@@ -43,6 +44,7 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
         myDBHelper = new MyDBHelper(getContext());
         sqlDB = myDBHelper.getWritableDatabase();
 
+        calendar = new GregorianCalendar();
 
         datePickerStartDay = findViewById(R.id.datePickerStartDay);
 
@@ -51,6 +53,8 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
 
         btn_cancel.setOnClickListener(this);
         btn_ok.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -71,10 +75,17 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
                 } else {
                     Day = String.valueOf(datePickerStartDay.getDayOfMonth());
                 }
-                TempSaveDay = Year + Month + Day;
-                FragmentMain.dialogOk = 1;
-                dismiss();
-                break;
+                long setdate = 365 * datePickerStartDay.getYear() + 30 * datePickerStartDay.getMonth() + datePickerStartDay.getDayOfMonth();
+                long currentdate = 365 * calendar.get(Calendar.YEAR) + 30 * calendar.get(Calendar.MONTH) + calendar.get(Calendar.DATE);
+                if( setdate <= currentdate ) {
+                    TempSaveDay = Year + Month + Day;
+                    FragmentMain.dialogOk = 1;
+                    dismiss();
+                    break;
+                }
+                else{
+                    Toast.makeText(mContext, "오늘 이전으로 설정 해 주세요!", Toast.LENGTH_SHORT).show();
+                }
         }
     }
 }
