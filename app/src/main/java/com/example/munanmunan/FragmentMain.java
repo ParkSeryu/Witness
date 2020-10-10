@@ -39,14 +39,17 @@ public class FragmentMain extends Fragment {
     TextView toolbarText, tvMainDay;
     ImageButton btnPlus;
     DialogStartDay dialogStartDay;
+    Calendar calendar, calendarAni;
+    SimpleDateFormat simpleDateFormat, simpleDateFormatAnniv;
+    RecyclerView recyclerView;
+    RecyclerViewAdapterAnniversary recyclerViewAdapterAnniversary;
+
     private DialogAddAnniv dialogAddAniv;
     private String sYear, sMonth, sDay;
-    private Calendar calendar;
     private Date startDate, currentDate;
     private String sStart, sCurrent;
     private long calDateDays;
     static int dialogOk;
-    SimpleDateFormat simpleDateFormat;
 
     // 리사이클러뷰에 표시할 데이터 리스트 생성.
     ArrayList<AnniversaryListItem> mList = new ArrayList<>();
@@ -91,6 +94,17 @@ public class FragmentMain extends Fragment {
 
         calendar = new GregorianCalendar();
         simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        simpleDateFormatAnniv = new SimpleDateFormat("yyyy. MM. dd ");
+
+        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
+        recyclerView = view.findViewById(R.id.RecyclerView_upcoming);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), 1));
+
+        // 리사이클러뷰에 Adapter 객체 지정.
+        recyclerViewAdapterAnniversary = new RecyclerViewAdapterAnniversary(mList);
+        recyclerView.setAdapter(recyclerViewAdapterAnniversary);
+
 
         dialogStartDay = new DialogStartDay(getContext());
         dialogStartDay.setCancelable(false);
@@ -113,8 +127,8 @@ public class FragmentMain extends Fragment {
                 }
             });
         } else {
-                datePickerSetDate();
-            }
+            datePickerSetDate();
+        }
 
         tvMainDay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,9 +144,7 @@ public class FragmentMain extends Fragment {
                             sqlDB.execSQL("insert into meetDay VALUES ('" + DialogStartDay.TempSaveDay + "');");
                             datePickerSetDate();
                             dialogOk = 0;
-                        }
-                        else if (dialogOk == 1 && cursor.getCount() > 0)
-                        {
+                        } else if (dialogOk == 1 && cursor.getCount() > 0) {
                             sqlDB.execSQL("update meetDay set startDay = '" + DialogStartDay.TempSaveDay + "';");
                             datePickerSetDate();
                         }
@@ -143,35 +155,13 @@ public class FragmentMain extends Fragment {
         });
 
 
-        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-        RecyclerView recyclerView = view.findViewById(R.id.RecyclerView_upcoming);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), 1));
-
-        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        RecyclerViewAdapterAnniversary recyclerViewAdapterAnniversary = new RecyclerViewAdapterAnniversary(mList);
-        recyclerView.setAdapter(recyclerViewAdapterAnniversary);
-
-        addItem("100일", "2020.03.04", "D-84");
-        addItem("200일", "2020.02.27", "D-72");
-        addItem("300일", "2020.02.27", "D-72");
-        addItem("400일", "2020.02.27", "D-72");
-        addItem("500일", "2020.02.27", "D-72");
-        addItem("600일", "2020.02.27", "D-72");
-        addItem("700일", "2020.02.27", "D-72");
-        addItem("800일", "2020.02.27", "D-72");
-        addItem("900일", "2020.02.27", "D-72");
-        addItem("1000일", "2020.02.27", "D-72");
-        addItem("1100일", "2020.02.27", "D-72");
-        addItem("1200일", "2020.02.27", "D-72");
-
-        recyclerViewAdapterAnniversary.notifyDataSetChanged();
         return view;
     }
 
 
     public void addItem(String RemainDay, String WhenDay, String Dday) {
         AnniversaryListItem item = new AnniversaryListItem();
+
         item.setRemainDay(RemainDay);
         item.setWhenDay(WhenDay);
         item.setDday(Dday);
@@ -180,6 +170,8 @@ public class FragmentMain extends Fragment {
     }
 
     private void datePickerSetDate() {
+        long calDate;
+        int position = 0;
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
         cursor.moveToLast();
         sStart = cursor.getString(0);
@@ -199,18 +191,98 @@ public class FragmentMain extends Fragment {
         try {
             currentDate = simpleDateFormat.parse(sCurrent);
             startDate = simpleDateFormat.parse(sStart);
-            long calDate = currentDate.getTime() - startDate.getTime();
+            calDate = currentDate.getTime() - startDate.getTime();
 
             calDateDays = calDate / (24 * 60 * 60 * 1000);
             calDateDays = Math.abs(calDateDays);
             Log.d("test1", calDateDays + "");
-            calDateDays += 1 ;
+            calDateDays += 1;
         } catch (ParseException e) {
-            Log.d("exception test", "" + calDateDays);
+            Log.d("exception test1", "" + calDateDays);
         }
-        tvMainDay.setText(calDateDays + "일");
+
+        tvMainDay.setText(calDateDays + "일"); // 몇일인가 설정
+
+        //기념일 만들기
+        String[] remainDay = {"시작한날", "100일", "200일", "300일", "1주년", "400일", "500일", "600일", "700일", "2주년", "800일", "900일", "1000일",
+                "3주년", "1100일", "1200일", "1300일", "1400일", "4주년", "1500일", "1600일", "1700일", "1800일", "5주년", "1900일", "2000일", "2100일", "6주년", "2200일", "2300일",
+                "2400일", "2500일", "7주년", "2600일", "2700일", "2800일", "2900일", "8주년", "3000일", "3100일", "3200일", "9주년", "3300일", "3400일", "3500일", "3600일", "10주년"};
+        int[] remainDay_int = {1, 100, 200, 300, 0, 400, 500, 600, 700, 0, 800, 900, 1000, 0, 1100, 1200, 1300, 1400, 0, 1500, 1600, 1700, 1800, 0, 1900, 2000, 2100, 0, 2200, 2300,
+                2400, 2500, 0, 2600, 2700, 2800, 2900, 0, 3000, 3100, 3200, 0, 3300, 3400, 3500, 3600, 0};
+        String whenDay;
+        String Dday;
+
+        calendarAni = new GregorianCalendar();
+
+        sqlDB.execSQL("DELETE FROM anniversary"); //초기화
+        mList.clear();
+        for (int i = 0, j = 0; i < remainDay.length; i++) {
+            calendarAni.setTime(startDate); // 기념일 set
+            if (remainDay_int[i] == 0) {
+                j++;
+                calendarAni.add(Calendar.YEAR, j);
+            } else
+                calendarAni.add(Calendar.DAY_OF_MONTH, remainDay_int[i] - 1);
+
+            whenDay = simpleDateFormatAnniv.format(calendarAni.getTime());
+
+            switch (calendarAni.get(Calendar.DAY_OF_WEEK)) {
+                case 1:
+                    whenDay += "(일)";
+                    break;
+                case 2:
+                    whenDay += "(월)";
+                    break;
+                case 3:
+                    whenDay += "(화)";
+                    break;
+                case 4:
+                    whenDay += "(수)";
+                    break;
+                case 5:
+                    whenDay += "(목)";
+                    break;
+                case 6:
+                    whenDay += "(금)";
+                    break;
+                case 7:
+                    whenDay += "(토)";
+                    break;
+                default:
+                    whenDay = "오류";
+            }
+
+            Date cal = new Date(calendarAni.getTimeInMillis());
+            calDate = currentDate.getTime() - cal.getTime();
+            if (currentDate.getTime() > cal.getTime()) {
+                Dday = "D+";
+                position = i;
+            } else
+                Dday = "D-";
+            calDateDays = calDate / (24 * 60 * 60 * 1000);
+
+
+            if (i == 0)
+                calDateDays = Math.abs(calDateDays) + 1;
+            else
+                calDateDays = Math.abs(calDateDays);
+
+            Dday += calDateDays;
+            if (calDate == 0)
+                Dday = "오늘";
+
+            sqlDB.execSQL("insert into anniversary VALUES ('" + remainDay[i] + "' , '" +
+                    whenDay + "','" +
+                    Dday + "');");
+            addItem(remainDay[i], whenDay, Dday);
+
+        }
+
+        recyclerViewAdapterAnniversary.notifyDataSetChanged();
+
+        RecyclerViewAdapterAnniversary.colorPosition = position + 1;
+        recyclerView.scrollToPosition(RecyclerViewAdapterAnniversary.colorPosition);
         cursor.close();
         sqlDB.close();
     }
-
 }

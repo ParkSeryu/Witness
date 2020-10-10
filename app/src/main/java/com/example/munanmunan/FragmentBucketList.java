@@ -69,8 +69,8 @@ public class FragmentBucketList extends Fragment {
         addItem("에버랜드 가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
 
 
-        FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabAddBL = view.findViewById(R.id.fabAddBL);
+        fabAddBL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

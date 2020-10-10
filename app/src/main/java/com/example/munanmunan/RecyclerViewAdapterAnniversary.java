@@ -1,6 +1,7 @@
 package com.example.munanmunan;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,13 @@ import java.util.ArrayList;
 public class RecyclerViewAdapterAnniversary extends RecyclerView.Adapter<RecyclerViewAdapterAnniversary.ViewHolder> {
 
     private ArrayList<AnniversaryListItem> AnniverSaryData = null;
-
+    static int colorPosition;
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView tvRemainDay;
         TextView tvWhenDay;
         TextView tvDday;
+
 
         ViewHolder(View itemView){
             super(itemView);
@@ -58,6 +60,13 @@ public class RecyclerViewAdapterAnniversary extends RecyclerView.Adapter<Recycle
         holder.tvRemainDay.setText(item.getRemainDay());
         holder.tvWhenDay.setText(item.getWhenDay());
         holder.tvDday.setText(item.getdDay());
+
+        if(position < colorPosition)
+        {
+            holder.tvRemainDay.setTextColor(Color.GRAY);
+            holder.tvWhenDay.setTextColor(Color.GRAY);
+            holder.tvDday.setTextColor(Color.GRAY);
+        }
     }
 
 
