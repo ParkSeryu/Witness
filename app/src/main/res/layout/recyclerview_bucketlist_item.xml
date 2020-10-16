@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:fontFamily="@font/font_ink_liquid"
+            android:fontFamily="@font/font_hangul"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:textColor="@color/textColorGray"

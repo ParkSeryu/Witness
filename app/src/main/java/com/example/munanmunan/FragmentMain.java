@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -169,7 +170,9 @@ public class FragmentMain extends Fragment {
         mList.add(item);
     }
 
+
     private void datePickerSetDate() {
+
         long calDate;
         int position = 0;
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
@@ -279,9 +282,8 @@ public class FragmentMain extends Fragment {
         }
 
         recyclerViewAdapterAnniversary.notifyDataSetChanged();
-
-        RecyclerViewAdapterAnniversary.colorPosition = position + 1;
-        recyclerView.scrollToPosition(RecyclerViewAdapterAnniversary.colorPosition);
+        recyclerView.scrollToPosition(position + 1);
+        RecyclerViewAdapterAnniversary.go = 0;
         cursor.close();
         sqlDB.close();
     }

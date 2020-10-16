@@ -2,6 +2,7 @@ package com.example.munanmunan;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +16,16 @@ import java.util.ArrayList;
 public class RecyclerViewAdapterAnniversary extends RecyclerView.Adapter<RecyclerViewAdapterAnniversary.ViewHolder> {
 
     private ArrayList<AnniversaryListItem> AnniverSaryData = null;
-    static int colorPosition;
+    static int go = 0;
+
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvRemainDay;
         TextView tvWhenDay;
         TextView tvDday;
 
 
-        ViewHolder(View itemView){
+        ViewHolder(View itemView) {
             super(itemView);
 
             // 뷰 객체에 대한 참조.
@@ -35,7 +37,7 @@ public class RecyclerViewAdapterAnniversary extends RecyclerView.Adapter<Recycle
     }
 
     //생성자에서 데이터 리스트 객체를 전달받음.
-    RecyclerViewAdapterAnniversary(ArrayList<AnniversaryListItem> list){
+    RecyclerViewAdapterAnniversary(ArrayList<AnniversaryListItem> list) {
         AnniverSaryData = list;
     }
 
@@ -56,17 +58,16 @@ public class RecyclerViewAdapterAnniversary extends RecyclerView.Adapter<Recycle
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapterAnniversary.ViewHolder holder, int position) {
         AnniversaryListItem item = AnniverSaryData.get(position);
-
         holder.tvRemainDay.setText(item.getRemainDay());
         holder.tvWhenDay.setText(item.getWhenDay());
         holder.tvDday.setText(item.getdDay());
+        Log.d("test2", position + "/" + holder.tvDday.getText().toString());
+            if (holder.tvDday.getText().toString().substring(1, 2).equals("+")) {
 
-        if(position < colorPosition)
-        {
-            holder.tvRemainDay.setTextColor(Color.GRAY);
-            holder.tvWhenDay.setTextColor(Color.GRAY);
-            holder.tvDday.setTextColor(Color.GRAY);
-        }
+                holder.tvRemainDay.setTextColor(Color.RED);
+                holder.tvWhenDay.setTextColor(Color.RED);
+                holder.tvDday.setTextColor(Color.RED);
+            }
     }
 
 
