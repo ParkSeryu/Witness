@@ -2,6 +2,7 @@ package com.example.munanmunan;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +17,12 @@ import java.util.ArrayList;
 public class RecyclerViewAdapterAnniversary extends RecyclerView.Adapter<RecyclerViewAdapterAnniversary.ViewHolder> {
 
     private ArrayList<AnniversaryListItem> AnniverSaryData = null;
-    static int go = 0;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvRemainDay;
         TextView tvWhenDay;
         TextView tvDday;
-
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -61,12 +60,17 @@ public class RecyclerViewAdapterAnniversary extends RecyclerView.Adapter<Recycle
         holder.tvRemainDay.setText(item.getRemainDay());
         holder.tvWhenDay.setText(item.getWhenDay());
         holder.tvDday.setText(item.getdDay());
-        Log.d("test2", position + "/" + holder.tvDday.getText().toString());
-            if (holder.tvDday.getText().toString().substring(1, 2).equals("+")) {
 
-                holder.tvRemainDay.setTextColor(Color.RED);
-                holder.tvWhenDay.setTextColor(Color.RED);
-                holder.tvDday.setTextColor(Color.RED);
+            if (holder.tvDday.getText().subSequence(1,2).equals("+")) {
+                Log.d("test3", position + "/" + FragmentMain.position);
+                holder.tvRemainDay.setTextColor(Color.GRAY);
+                holder.tvWhenDay.setTextColor(Color.GRAY);
+                holder.tvDday.setTextColor(Color.GRAY);
+            }
+            else{
+                holder.tvRemainDay.setTextColor(Color.rgb(82,82,82));
+                holder.tvWhenDay.setTextColor(Color.rgb(82,82,82));
+                holder.tvDday.setTextColor(Color.rgb(82,82,82));
             }
     }
 

@@ -1,6 +1,7 @@
 package com.example.munanmunan;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +20,14 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
     private DialogBucketList dialogBucketList;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView BucketListContent;
         ImageButton BucketListModified;
         ImageButton BucketListDeleted;
 
         int flag;
 
-        ViewHolder(View itemView){
+        ViewHolder(View itemView) {
             super(itemView);
 
             // 뷰 객체에 대한 참조.
@@ -37,11 +38,10 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
             BucketListContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(flag == 0) {
+                    if (flag == 0) {
                         BucketListContent.setPaintFlags(BucketListContent.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         flag = 1;
-                    }
-                    else{
+                    } else {
                         BucketListContent.setPaintFlags(0);
                         flag = 0;
                     }
@@ -52,8 +52,11 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
 
         }
     }
+
     //생성자에서 데이터 리스트 객체를 전달받음.
-    RecyclerViewAdapterBucketList(ArrayList<BucketListItem> list) { BucketListData = list; }
+    RecyclerViewAdapterBucketList(ArrayList<BucketListItem> list) {
+        BucketListData = list;
+    }
 
     //onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴
     @NonNull
@@ -83,6 +86,12 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
                 dialogBucketList = new DialogBucketList(context);
                 dialogBucketList.setCancelable(false);
                 dialogBucketList.show();
+                dialogBucketList.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        holder.BucketListContent.setText(DialogBucketList.content);
+                    }
+                });
             }
         });
 
@@ -90,10 +99,10 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
         holder.BucketListDeleted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sqlDB.execSQL("DELETE FROM * WHERE list =" + item.getBucketListContent() )
                 BucketListData.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, BucketListData.size());
-
             }
         });
 

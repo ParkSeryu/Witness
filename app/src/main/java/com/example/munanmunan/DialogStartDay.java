@@ -21,15 +21,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class DialogStartDay extends Dialog implements View.OnClickListener {
-    private Context mContext;
+    Context mContext;
     DatePicker datePickerStartDay;
-    private TextView btn_cancel;
-    private TextView btn_ok;
-    private String Year, Month, Day;
+    TextView btn_cancel;
+    TextView btn_ok;
+    String Year, Month, Day;
     private Calendar calendar;
     public static String TempSaveDay;
-    MyDBHelper myDBHelper;
-    SQLiteDatabase sqlDB;
 
     public DialogStartDay(@NonNull Context context) {
         super(context);
@@ -40,9 +38,6 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_start_day);
-
-        myDBHelper = new MyDBHelper(getContext());
-        sqlDB = myDBHelper.getWritableDatabase();
 
         calendar = new GregorianCalendar();
 
@@ -66,24 +61,24 @@ public class DialogStartDay extends Dialog implements View.OnClickListener {
             case R.id.btn_ok:
                 Year = String.valueOf(datePickerStartDay.getYear());
                 if (datePickerStartDay.getMonth() + 1 < 10) {
-                    Month = "0" + String.valueOf(datePickerStartDay.getMonth() + 1);
+                    Month = "0" + (datePickerStartDay.getMonth() + 1);
                 } else {
                     Month = String.valueOf(datePickerStartDay.getMonth() + 1);
                 }
                 if (datePickerStartDay.getDayOfMonth() + 1 < 10) {
-                    Day = "0" + String.valueOf(datePickerStartDay.getDayOfMonth());
+                    Day = "0" + datePickerStartDay.getDayOfMonth();
                 } else {
                     Day = String.valueOf(datePickerStartDay.getDayOfMonth());
                 }
                 long setdate = 365 * datePickerStartDay.getYear() + 30 * datePickerStartDay.getMonth() + datePickerStartDay.getDayOfMonth();
                 long currentdate = 365 * calendar.get(Calendar.YEAR) + 30 * calendar.get(Calendar.MONTH) + calendar.get(Calendar.DATE);
-                if( setdate <= currentdate ) {
+                if (setdate <= currentdate) {
                     TempSaveDay = Year + Month + Day;
+                    Log.d("test333", Year +"/" + Month + "/" + Day);
                     FragmentMain.dialogOk = 1;
                     dismiss();
                     break;
-                }
-                else{
+                } else {
                     Toast.makeText(mContext, "오늘 이전으로 설정 해 주세요!", Toast.LENGTH_SHORT).show();
                 }
         }
