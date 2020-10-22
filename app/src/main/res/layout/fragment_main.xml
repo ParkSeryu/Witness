@@ -86,6 +86,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
+        android:id="@+id/tv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font_ink_liquid"
@@ -110,6 +111,7 @@
         app:layout_constraintTop_toTopOf="@id/guideline_Top" />
 
     <TextView
+        android:id="@+id/tv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font_ink_liquid"

@@ -8,4 +8,5 @@
     <string name="dialog_add_anniversary">기념일 추가하기</string>
     <string name="dialog_hint1">기념일 명을 입력하세요</string>
     <string name="dialog_add_bucket_list">버킷리스트 작성하기</string>
+    <string name="dialog_repeat_year">매년 반복</string>
 </resources>

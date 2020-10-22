@@ -19,8 +19,8 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE meetDay (StartDay VARCHAR(8));");
+        db.execSQL("CREATE TABLE meetDay (StartDay VARCHAR(8), First VARCHAR(7), Second VARCHAR(7));");
         db.execSQL("CREATE TABLE anniversary (WhatDay VARCHAR(8), WhenDay VARCHAR(10), Dday VARCHAR(10));");
-        db.execSQL("CREATE TABLE bucketListDay (list VARCHAR(30), clear int);");
+        db.execSQL("CREATE TABLE bucketListDay (list VARCHAR(30), clear int, InputDay Date);");
     }
 }

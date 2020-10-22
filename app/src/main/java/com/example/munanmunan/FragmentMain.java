@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +37,7 @@ public class FragmentMain extends Fragment {
     // --db
 
     ImageButton btnGoBcl;
-    TextView toolbarText, tvMainDay;
+    TextView toolbarText, tvMainDay, tv1, tv2;
     ImageButton btnPlus;
     DialogStartDay dialogStartDay;
     Calendar calendar, calendarAni;
@@ -45,11 +46,12 @@ public class FragmentMain extends Fragment {
     RecyclerViewAdapterAnniversary recyclerViewAdapterAnniversary;
 
     private DialogAddAnniv dialogAddAniv;
-    private String sYear, sMonth, sDay;
+    private DialogChangeText dialogChangeText;
+    String sYear, sMonth, sDay;
     private Date startDate, currentDate;
-    private String sStart, sCurrent;
+    String sStart, sCurrent;
     private long calDateDays;
-    static int dialogOk;
+    static int dialogOk, position;
 
     // 리사이클러뷰에 표시할 데이터 리스트 생성.
     ArrayList<AnniversaryListItem> mList = new ArrayList<>();
@@ -80,17 +82,9 @@ public class FragmentMain extends Fragment {
         toolbarText = view.findViewById(R.id.toolbarText);
         toolbarText.setText("Witness");
 
-        btnPlus = view.findViewById(R.id.btnPlus);
-        btnPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogAddAniv = new DialogAddAnniv(getContext());
-                dialogAddAniv.setCancelable(false);
-                dialogAddAniv.show();
-            }
-        });
-
         tvMainDay = view.findViewById(R.id.tvMainDay);
+        tv1 = view.findViewById(R.id.tv1);
+        tv2 = view.findViewById(R.id.tv2);
 
         calendar = new GregorianCalendar();
         simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -111,7 +105,7 @@ public class FragmentMain extends Fragment {
 
         myDBHelper = new MyDBHelper(getContext());
         sqlDB = myDBHelper.getWritableDatabase();
-        //myDBHelper.onUpgrade(sqlDB, 0, 1); // 막 건들이지 말것. 위험
+        //   myDBHelper.onUpgrade(sqlDB, 0, 1); // 막 건들이지 말것. 위험
 
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
         if (cursor.getCount() == 0) {
@@ -129,6 +123,26 @@ public class FragmentMain extends Fragment {
         } else {
             datePickerSetDate();
         }
+
+        btnPlus = view.findViewById(R.id.btnPlus);
+        btnPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogAddAniv = new DialogAddAnniv(getContext());
+                dialogAddAniv.setCancelable(false);
+                dialogAddAniv.show();
+                dialogAddAniv.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if (dialogOk == 2) {
+                            datePickerAddAniv();
+                            dialogOk = 0;
+                        }
+                    }
+                });
+
+            }
+        });
 
         tvMainDay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +168,43 @@ public class FragmentMain extends Fragment {
             }
         });
 
+     /*   tv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogChangeText.flag = 1;
+                dialogChangeText = new DialogChangeText(getContext());
+                dialogChangeText.setCancelable(false);
+                dialogChangeText.show();
+                dialogChangeText.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if (DialogChangeText.flag == 2) {
+                            tv1.setText(DialogChangeText.contentText);
+                            dialogOk = 0;
+                        }
 
+                    }
+                });
+            }
+        });
+        tv2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogChangeText = new DialogChangeText(getContext());
+                dialogChangeText.setCancelable(false);
+                dialogChangeText.show();
+                dialogChangeText.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if (DialogChangeText.flag == 2) {
+                            tv2.setText(DialogChangeText.contentText);
+                            dialogOk = 0;
+                        }
+
+                    }
+                });
+            }
+        });*/
         return view;
     }
 
@@ -169,9 +219,14 @@ public class FragmentMain extends Fragment {
         mList.add(item);
     }
 
+    private void datePickerAddAniv() {
+
+        sqlDB.execSQL("insert into meetDay VALUES ('" + DialogAddAnniv.TempSaveDay[0] + "');");
+    }
+
     private void datePickerSetDate() {
+
         long calDate;
-        int position = 0;
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
         cursor.moveToLast();
         sStart = cursor.getString(0);
@@ -269,7 +324,7 @@ public class FragmentMain extends Fragment {
 
             Dday += calDateDays;
             if (calDate == 0)
-                Dday = "오늘";
+                Dday = "D-DAY";
 
             sqlDB.execSQL("insert into anniversary VALUES ('" + remainDay[i] + "' , '" +
                     whenDay + "','" +
@@ -279,9 +334,7 @@ public class FragmentMain extends Fragment {
         }
 
         recyclerViewAdapterAnniversary.notifyDataSetChanged();
-
-        RecyclerViewAdapterAnniversary.colorPosition = position + 1;
-        recyclerView.scrollToPosition(RecyclerViewAdapterAnniversary.colorPosition);
+        recyclerView.scrollToPosition(position + 1);
         cursor.close();
         sqlDB.close();
     }
