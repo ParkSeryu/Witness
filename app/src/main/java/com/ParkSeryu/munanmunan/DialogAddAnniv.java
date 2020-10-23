@@ -1,4 +1,4 @@
-package com.example.munanmunan;
+package com.ParkSeryu.munanmunan;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -76,7 +76,7 @@ public class DialogAddAnniv extends Dialog implements View.OnClickListener {
                 strAniv = edtNewAnniv.getText().toString();
                 Year = String.valueOf(datePickerAddAniv.getYear());
                 if (datePickerAddAniv.getMonth() + 1 < 10) {
-                    Month = "0" + datePickerAddAniv.getMonth() + 1;
+                    Month = "0" + (datePickerAddAniv.getMonth() + 1);
                 } else {
                     Month = String.valueOf(datePickerAddAniv.getMonth() + 1);
                 }

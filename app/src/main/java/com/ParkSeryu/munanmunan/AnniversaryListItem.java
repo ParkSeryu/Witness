@@ -1,6 +1,4 @@
-package com.example.munanmunan;
-
-import android.graphics.Color;
+package com.ParkSeryu.munanmunan;
 
 public class AnniversaryListItem {
     private String remainDay;

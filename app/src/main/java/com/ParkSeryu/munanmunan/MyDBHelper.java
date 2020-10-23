@@ -1,4 +1,4 @@
-package com.example.munanmunan;
+package com.ParkSeryu.munanmunan;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,6 +14,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS meetDay");
         db.execSQL("DROP TABLE IF EXISTS anniversary");
         db.execSQL("DROP TABLE IF EXISTS bucketListDay");
+        db.execSQL("DROP TABLE IF EXISTS anniversary_user");
         onCreate(db);
     }
 
@@ -21,6 +22,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE meetDay (StartDay VARCHAR(8), First VARCHAR(7), Second VARCHAR(7));");
         db.execSQL("CREATE TABLE anniversary (WhatDay VARCHAR(8), WhenDay VARCHAR(10), Dday VARCHAR(10));");
+        db.execSQL("CREATE TABLE anniversary_user (WhatDay VARCHAR(8), WhenDay VARCHAR(10), Dday VARCHAR(10), InputDay Date, yearRepeat int);");
         db.execSQL("CREATE TABLE bucketListDay (list VARCHAR(30), clear int, InputDay Date);");
     }
 }

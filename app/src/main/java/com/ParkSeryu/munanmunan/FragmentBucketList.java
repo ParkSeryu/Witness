@@ -1,12 +1,10 @@
-package com.example.munanmunan;
+package com.ParkSeryu.munanmunan;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

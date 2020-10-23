@@ -1,10 +1,8 @@
-package com.example.munanmunan;
+package com.ParkSeryu.munanmunan;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +38,7 @@ public class FragmentMain extends Fragment {
     ImageButton btnPlus;
     DialogStartDay dialogStartDay;
     Calendar calendar, calendarAni;
-    SimpleDateFormat simpleDateFormat, simpleDateFormatAnniv;
+    SimpleDateFormat simpleDateFormat, simpleDateFormatAnniv, simpleDateFormatdetail;
     RecyclerView recyclerView;
     RecyclerViewAdapterAnniversary recyclerViewAdapterAnniversary;
 
@@ -89,6 +86,7 @@ public class FragmentMain extends Fragment {
         calendar = new GregorianCalendar();
         simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         simpleDateFormatAnniv = new SimpleDateFormat("yyyy. MM. dd ");
+        simpleDateFormatdetail = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
         recyclerView = view.findViewById(R.id.RecyclerView_upcoming);
@@ -105,7 +103,7 @@ public class FragmentMain extends Fragment {
 
         myDBHelper = new MyDBHelper(getContext());
         sqlDB = myDBHelper.getWritableDatabase();
-        //   myDBHelper.onUpgrade(sqlDB, 0, 1); // 막 건들이지 말것. 위험
+        //  myDBHelper.onUpgrade(sqlDB, 0, 1); // 막 건들이지 말것. 위험
 
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
         if (cursor.getCount() == 0) {
@@ -114,7 +112,15 @@ public class FragmentMain extends Fragment {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     if (dialogOk == 1) {
-                        sqlDB.execSQL("insert into meetDay VALUES ('" + DialogStartDay.TempSaveDay + "');");
+                        sqlDB.execSQL("insert into meetDay VALUES ('" + DialogStartDay.TempSaveDay + "','" +
+                                "우리는" + "','" +
+                                "일째" + "');");
+                        cursor = sqlDB.rawQuery("SELECT First, Second FROM meetDay;", null);
+                        cursor.moveToNext();
+                        String strTv1 = cursor.getString(0);
+                        String strTv2 = cursor.getString(1);
+                        tv1.setText(strTv1);
+                        tv2.setText(strTv2);
                         datePickerSetDate();
                         dialogOk = 0;
                     }
@@ -165,12 +171,15 @@ public class FragmentMain extends Fragment {
 
                     }
                 });
+                cursor.close();
+                sqlDB.close();
             }
         });
 
-     /*   tv1.setOnClickListener(new View.OnClickListener() {
+        tv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 DialogChangeText.flag = 1;
                 dialogChangeText = new DialogChangeText(getContext());
                 dialogChangeText.setCancelable(false);
@@ -179,8 +188,11 @@ public class FragmentMain extends Fragment {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         if (DialogChangeText.flag == 2) {
+                            sqlDB = myDBHelper.getWritableDatabase();
+                            sqlDB.execSQL("UPDATE meetDay SET First = '" + DialogChangeText.contentText + "';");
                             tv1.setText(DialogChangeText.contentText);
                             dialogOk = 0;
+                            sqlDB.close();
                         }
 
                     }
@@ -197,6 +209,8 @@ public class FragmentMain extends Fragment {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         if (DialogChangeText.flag == 2) {
+                            sqlDB = myDBHelper.getWritableDatabase();
+                            sqlDB.execSQL("UPDATE meetDay SET Second = '" + DialogChangeText.contentText + "';");
                             tv2.setText(DialogChangeText.contentText);
                             dialogOk = 0;
                         }
@@ -204,7 +218,8 @@ public class FragmentMain extends Fragment {
                     }
                 });
             }
-        });*/
+        });
+
         return view;
     }
 
@@ -220,8 +235,132 @@ public class FragmentMain extends Fragment {
     }
 
     private void datePickerAddAniv() {
+        sqlDB = myDBHelper.getWritableDatabase();
+        cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
 
-        sqlDB.execSQL("insert into meetDay VALUES ('" + DialogAddAnniv.TempSaveDay[0] + "');");
+        long calDate;
+        String whenDay;
+        String Dday;
+
+        try {
+            startDate = simpleDateFormat.parse(DialogAddAnniv.TempSaveDay[0]);
+        } catch (ParseException e) {
+            Log.d("exception test1", "" + calDateDays);
+        }
+        Log.d("test1", DialogAddAnniv.TempSaveDay[0]);
+        if (DialogAddAnniv.TempSaveDay[2].equals("1")) {
+
+            for (int i = 0; i < 10; i++) {
+                calendarAni.setTime(startDate); // 기념일 set
+                calendarAni.add(Calendar.YEAR, i);
+
+                whenDay = simpleDateFormatAnniv.format(calendarAni.getTime());
+
+                switch (calendarAni.get(Calendar.DAY_OF_WEEK)) {
+                    case 1:
+                        whenDay += "(일)";
+                        break;
+                    case 2:
+                        whenDay += "(월)";
+                        break;
+                    case 3:
+                        whenDay += "(화)";
+                        break;
+                    case 4:
+                        whenDay += "(수)";
+                        break;
+                    case 5:
+                        whenDay += "(목)";
+                        break;
+                    case 6:
+                        whenDay += "(금)";
+                        break;
+                    case 7:
+                        whenDay += "(토)";
+                        break;
+                    default:
+                        whenDay = "오류";
+                }
+
+                Date cal = new Date(calendarAni.getTimeInMillis());
+                calDate = currentDate.getTime() - cal.getTime();
+                calDateDays = calDate / (24 * 60 * 60 * 1000);
+                if (currentDate.getTime() > cal.getTime()) {
+                    Dday = "D+";
+                } else
+                    Dday = "D-";
+                calDateDays = calDate / (24 * 60 * 60 * 1000);
+                calDateDays = Math.abs(calDateDays);
+                Dday += calDateDays;
+                if (calDate == 0)
+                    Dday = "D-DAY";
+
+                Date time = new Date();
+                String currentTime = simpleDateFormatdetail.format(time);
+
+                sqlDB.execSQL("insert into anniversary_user VALUES ('" + DialogAddAnniv.TempSaveDay[1] + "','" +
+                        whenDay + "','" +
+                        Dday + "','" +
+                        currentTime + "','" +
+                        1 + "');");
+                //sqlDB.execSQL("DELETE FROM anniversary_user ;");
+            }
+        } else {
+            calendarAni.setTime(startDate); // 기념일 set
+
+            whenDay = simpleDateFormatAnniv.format(calendarAni.getTime());
+
+            switch (calendarAni.get(Calendar.DAY_OF_WEEK)) {
+                case 1:
+                    whenDay += "(일)";
+                    break;
+                case 2:
+                    whenDay += "(월)";
+                    break;
+                case 3:
+                    whenDay += "(화)";
+                    break;
+                case 4:
+                    whenDay += "(수)";
+                    break;
+                case 5:
+                    whenDay += "(목)";
+                    break;
+                case 6:
+                    whenDay += "(금)";
+                    break;
+                case 7:
+                    whenDay += "(토)";
+                    break;
+                default:
+                    whenDay = "오류";
+            }
+
+            Date cal = new Date(calendarAni.getTimeInMillis());
+            calDate = currentDate.getTime() - cal.getTime();
+            calDateDays = calDate / (24 * 60 * 60 * 1000);
+            if (currentDate.getTime() > cal.getTime()) {
+                Dday = "D+";
+            } else
+                Dday = "D-";
+            calDateDays = calDate / (24 * 60 * 60 * 1000);
+            calDateDays = Math.abs(calDateDays);
+            Dday += calDateDays;
+            if (calDate == 0)
+                Dday = "D-DAY";
+
+            Date time = new Date();
+            String currentTime = simpleDateFormatdetail.format(time);
+
+            sqlDB.execSQL("insert into anniversary_user VALUES ('" + DialogAddAnniv.TempSaveDay[1] + "','" +
+                    whenDay + "','" +
+                    Dday + "','" +
+                    currentTime + "','" +
+                    0 + "');");
+
+        }
+        setRecyclerView();
+
     }
 
     private void datePickerSetDate() {
@@ -270,7 +409,6 @@ public class FragmentMain extends Fragment {
         calendarAni = new GregorianCalendar();
 
         sqlDB.execSQL("DELETE FROM anniversary"); //초기화
-        mList.clear();
         for (int i = 0, j = 0; i < remainDay.length; i++) {
             calendarAni.setTime(startDate); // 기념일 set
             if (remainDay_int[i] == 0) {
@@ -311,7 +449,6 @@ public class FragmentMain extends Fragment {
             calDate = currentDate.getTime() - cal.getTime();
             if (currentDate.getTime() > cal.getTime()) {
                 Dday = "D+";
-                position = i;
             } else
                 Dday = "D-";
             calDateDays = calDate / (24 * 60 * 60 * 1000);
@@ -329,9 +466,22 @@ public class FragmentMain extends Fragment {
             sqlDB.execSQL("insert into anniversary VALUES ('" + remainDay[i] + "' , '" +
                     whenDay + "','" +
                     Dday + "');");
-            addItem(remainDay[i], whenDay, Dday);
-
         }
+        setRecyclerView();
+    }
+
+    public void setRecyclerView() {
+        mList.clear();
+        cursor = sqlDB.rawQuery("SELECT * FROM anniversary Union SELECT WhatDay, WhenDay, Dday FROM anniversary_user order by WhenDay;", null);
+        while (cursor.moveToNext()) {
+            addItem(cursor.getString(0), cursor.getString(1), cursor.getString(2));
+            if (cursor.getString(2).contains("+")) {
+                Log.d("positiontest", "" + cursor.getString(2));
+                position = cursor.getPosition();
+                Log.d("positiontest1", "" + position);
+            }
+        }
+        //Log.d("positiontest", "" + position);
 
         recyclerViewAdapterAnniversary.notifyDataSetChanged();
         recyclerView.scrollToPosition(position + 1);

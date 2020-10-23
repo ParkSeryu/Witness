@@ -1,4 +1,4 @@
-package com.example.munanmunan;
+package com.ParkSeryu.munanmunan;
 
 import android.graphics.drawable.Drawable;
 import android.util.Log;

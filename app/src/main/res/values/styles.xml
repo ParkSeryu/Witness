@@ -10,7 +10,7 @@
     </style>
 
     <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name="android:windowBackground">@drawable/ic_launcher_background</item>
+        <item name="android:windowBackground">@drawable/witness_splash</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -1,4 +1,4 @@
-package com.example.munanmunan;
+package com.ParkSeryu.munanmunan;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,13 +12,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<RecyclerViewAdapterBucketList.ViewHolder> {
     Context context;
@@ -133,10 +131,11 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
                         sqlDB.execSQL("update bucketListDay set list = '" + DialogBucketList.content + "'" + "WHERE list = '" + matchList + "'"
                                 + "AND InputDay = '" + matchDay
                                 + "';");
+                        sqlDB.close();
+                        cursor.close();
                     }
                 });
-                sqlDB.close();
-                cursor.close();
+
             }
         });
 

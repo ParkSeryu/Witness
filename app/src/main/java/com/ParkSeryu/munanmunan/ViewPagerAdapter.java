@@ -1,4 +1,4 @@
-package com.example.munanmunan;
+package com.ParkSeryu.munanmunan;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

@@ -9,4 +9,6 @@
     <string name="dialog_hint1">기념일 명을 입력하세요</string>
     <string name="dialog_add_bucket_list">버킷리스트 작성하기</string>
     <string name="dialog_repeat_year">매년 반복</string>
+    <string name="dialog_delete_anniversary">기념일 삭제하기</string>
+    <string name="dialog_delete">기념일을 삭제 하시겠어요?</string>
 </resources>
