@@ -28,7 +28,7 @@ public class DialogAddAnniv extends Dialog implements View.OnClickListener {
     LinearLayout li;
     String strAniv, Year, Month, Day;
     String checkboxFlag;
-    private Calendar calendar;
+    Calendar calendar;
     static String TempSaveDay[] = new String[3];
 
     public DialogAddAnniv(@NonNull Context context) {
@@ -94,7 +94,6 @@ public class DialogAddAnniv extends Dialog implements View.OnClickListener {
                     TempSaveDay[2] = checkboxFlag;
                     FragmentMain.dialogOk = 2;
                     dismiss();
-                    //  ((MainActivity) mContext).finish();
                     break;
                 }
         }

@@ -5,7 +5,6 @@ public class AnniversaryListItem {
     private String whenDay;
     private String Dday;
 
-
     public void setRemainDay(String remainDay) {
         this.remainDay = remainDay;
     }

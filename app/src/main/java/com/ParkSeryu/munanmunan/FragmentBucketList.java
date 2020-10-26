@@ -112,17 +112,6 @@ public class FragmentBucketList extends Fragment {
         cursor.close();
         sqlDB.close();
         return view;
-
-
-           /* 리스트뷰 == > 리사이클러뷰로 변경. 20.09.24.
-        ListView bucketListView;
-        BucketListViewAdapter bucketListViewAdapter;
-        bucketListViewAdapter = new BucketListViewAdapter();
-        bucketListView = view.findViewById(R.id.bucketListView);
-        bucketListView.setAdapter(bucketListViewAdapter);
-        bucketListViewAdapter.addItem("석촌호수가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_camera), ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_gallery));
-        bucketListViewAdapter.addItem("에버랜드가기", ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_camera), ContextCompat.getDrawable(getActivity(), R.drawable.ic_menu_gallery));
-        */
     }
 
     public void addItem(String content, int clear, Drawable modifisrc, Drawable deletesrc) {

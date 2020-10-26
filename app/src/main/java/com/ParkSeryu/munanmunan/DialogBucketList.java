@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 public class DialogBucketList extends Dialog implements View.OnClickListener {
-    private Context mContext;
+    Context mContext;
     private TextView btn_cancel;
     private TextView btn_ok;
     private TextView tvTitle;

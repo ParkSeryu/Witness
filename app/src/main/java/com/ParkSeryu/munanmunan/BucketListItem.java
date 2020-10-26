@@ -14,12 +14,11 @@ public class BucketListItem {
         this.bucketListContent = bucketListContent;
     }
 
-    public void setBucketListClear(int bucketListClear){
-        if(bucketListClear == 1)
-        this.bucketListclear = 16;
+    public void setBucketListClear(int bucketListClear) {
+        if (bucketListClear == 1)
+            this.bucketListclear = 16;
         else
             this.bucketListclear = 0;
-        Log.d("test333", ""+bucketListclear);
     }
 
     public void setBucketListModified(Drawable bucketListModified) {
@@ -34,7 +33,9 @@ public class BucketListItem {
         return this.bucketListContent;
     }
 
-    public int getBucketListclear() { return  this.bucketListclear; }
+    public int getBucketListclear() {
+        return this.bucketListclear;
+    }
 
     public Drawable getBucketListModified() {
         return this.bucketListModified;
