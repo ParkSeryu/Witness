@@ -6,6 +6,7 @@ import android.util.Log;
 public class BucketListItem {
 
     private String bucketListContent;
+    private String bucketListDate;
     private int bucketListclear;
     private Drawable bucketListModified;
     private Drawable bucketListDelete;
@@ -21,6 +22,10 @@ public class BucketListItem {
             this.bucketListclear = 0;
     }
 
+    public void setBucketListDate(String bucketListDate) {
+        this.bucketListDate = bucketListDate;
+    }
+
     public void setBucketListModified(Drawable bucketListModified) {
         this.bucketListModified = bucketListModified;
     }
@@ -33,8 +38,14 @@ public class BucketListItem {
         return this.bucketListContent;
     }
 
+
+
     public int getBucketListclear() {
         return this.bucketListclear;
+    }
+
+    public String getBucketListDate() {
+        return this.bucketListDate;
     }
 
     public Drawable getBucketListModified() {

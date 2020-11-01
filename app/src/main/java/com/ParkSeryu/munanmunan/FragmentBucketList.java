@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,7 +61,7 @@ public class FragmentBucketList extends Fragment {
 
         myDBHelper = new MyDBHelper(getContext());
         sqlDB = myDBHelper.getWritableDatabase();
-        cursor = sqlDB.rawQuery("SELECT list, clear from bucketListDay order by clear, InputDay desc;", null);
+        cursor = sqlDB.rawQuery("SELECT list, clear, InputDay from bucketListDay order by clear, InputDay ;", null);
 
         btnGoCalendar = view.findViewById(R.id.btnGoCalendar);
         btnGoCalendar.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +81,7 @@ public class FragmentBucketList extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(), 1));
 
         while(cursor.moveToNext()) {
-            addItem(cursor.getString(0), cursor.getInt(1), ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
+            addItem(cursor.getString(0), cursor.getInt(1), cursor.getString(2), ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
         }
 
         FloatingActionButton fabAddBL = view.findViewById(R.id.fabAddBL);
@@ -100,7 +101,7 @@ public class FragmentBucketList extends Fragment {
                             sqlDB.execSQL("insert into bucketListDay VALUES ('" + DialogBucketList.content + "' ,'" +
                                     0 + "','" +
                                     currentTime + "');");
-                            addItem(DialogBucketList.content, 0, ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
+                            addItem(DialogBucketList.content, 0, currentTime,ContextCompat.getDrawable(getActivity(), R.drawable.ic_modified), ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
                             DialogBucketList.flag = 0;
                         }
 
@@ -114,11 +115,12 @@ public class FragmentBucketList extends Fragment {
         return view;
     }
 
-    public void addItem(String content, int clear, Drawable modifisrc, Drawable deletesrc) {
+    public void addItem(String content, int clear, String currentTime, Drawable modifisrc, Drawable deletesrc) {
         BucketListItem item = new BucketListItem();
 
         item.setBucketListContent(content);
         item.setBucketListClear(clear);
+        item.setBucketListDate(currentTime);
         item.setBucketListModified(modifisrc);
         item.setBucketListDelete(deletesrc);
 

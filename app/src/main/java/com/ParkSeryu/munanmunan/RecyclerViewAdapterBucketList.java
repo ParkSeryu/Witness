@@ -32,6 +32,7 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView BucketListContent;
+        TextView BucketListDate;
         ImageButton BucketListModified;
         ImageButton BucketListDeleted;
 
@@ -40,10 +41,10 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
 
 
             View view = LayoutInflater.from(context).inflate(R.layout.dialog_bucket_list, null, false);
-            final EditText editTextBL = view.findViewById(R.id.edtBucketList);
 
             // 뷰 객체에 대한 참조.
             BucketListContent = itemView.findViewById(R.id.bucketListContent);
+            BucketListDate = itemView.findViewById(R.id.bucketListDay);
             BucketListModified = itemView.findViewById(R.id.bucketListModified);
             BucketListDeleted = itemView.findViewById(R.id.bucketListDelete);
         }
@@ -73,6 +74,7 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
         BucketListItem item = BucketListData.get(position);
 
         holder.BucketListContent.setText(item.getBucketListContent());
+        holder.BucketListDate.setText(item.getBucketListDate());
         holder.BucketListContent.setPaintFlags(item.getBucketListclear());
         holder.BucketListModified.setImageDrawable(item.getBucketListModified());
         holder.BucketListDeleted.setImageDrawable(item.getBucketListDelete());
@@ -88,17 +90,17 @@ public class RecyclerViewAdapterBucketList extends RecyclerView.Adapter<Recycler
                 }
                 String matchList = cursor.getString(0);
                 String matchDay = cursor.getString(1);
-
-                if (holder.BucketListContent.getPaintFlags() == Paint.STRIKE_THRU_TEXT_FLAG || holder.BucketListContent.getPaintFlags() == 1299) {
+                Log.d("test22", holder.BucketListContent.getText() + "   "  + holder.BucketListDate);
+                if (holder.BucketListContent.getPaintFlags() == 16) {
                     holder.BucketListContent.setPaintFlags(0);
-                    sqlDB.execSQL("update bucketListDay set clear = '" + 0 + "'" + "WHERE list = '" + matchList + "'"
-                            + "AND InputDay = '" + matchDay
+                    sqlDB.execSQL("update bucketListDay set clear = '" + 0 + "'" + "WHERE list = '" + holder.BucketListContent.getText() + "'"
+                            + "AND InputDay = '" + holder.BucketListDate.getText()
                             + "';");
                 } else {
-                    Log.d("test22", holder.BucketListContent.getPaintFlags() + "/" + Paint.STRIKE_THRU_TEXT_FLAG);
+                    Log.d("test23", holder.BucketListContent.getPaintFlags() + "/" + Paint.STRIKE_THRU_TEXT_FLAG);
                     holder.BucketListContent.setPaintFlags(holder.BucketListContent.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    sqlDB.execSQL("update bucketListDay set clear = '" + 1 + "'" + "WHERE list = '" + matchList + "'"
-                            + "AND InputDay = '" + matchDay
+                    sqlDB.execSQL("update bucketListDay set clear = '" + 1 + "'" + "WHERE list = '" + holder.BucketListContent.getText() + "'"
+                            + "AND InputDay = '" + holder.BucketListDate.getText()
                             + "';");
                 }
 
