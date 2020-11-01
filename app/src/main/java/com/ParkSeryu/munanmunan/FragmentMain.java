@@ -18,6 +18,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,6 +55,7 @@ public class FragmentMain extends Fragment {
     String sStart, sCurrent;
     private long calDateDays;
     static int dialogOk, position;
+    private AdView mAdView;
 
     // 리사이클러뷰에 표시할 데이터 리스트 생성.
     ArrayList<AnniversaryListItem> mList = new ArrayList<>();
@@ -60,12 +67,27 @@ public class FragmentMain extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                Log.e("test", "test");
+            }
+        });
+
+        mAdView = view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+
 
         btnGoBcl = view.findViewById(R.id.goBcl);
         btnGoBcl.setOnClickListener(new View.OnClickListener() {
@@ -115,18 +137,14 @@ public class FragmentMain extends Fragment {
                         sqlDB.execSQL("insert into meetDay VALUES ('" + DialogStartDay.TempSaveDay + "','" +
                                 "우리는" + "','" +
                                 "일째" + "');");
-                        cursor = sqlDB.rawQuery("SELECT First, Second FROM meetDay;", null);
-                        cursor.moveToNext();
-                        String strTv1 = cursor.getString(0);
-                        String strTv2 = cursor.getString(1);
-                        tv1.setText(strTv1);
-                        tv2.setText(strTv2);
+
                         datePickerSetDate();
                         dialogOk = 0;
                     }
                 }
             });
         } else {
+
             datePickerSetDate();
         }
 
@@ -220,6 +238,16 @@ public class FragmentMain extends Fragment {
             }
         });
 
+        sqlDB = myDBHelper.getWritableDatabase();
+        cursor = sqlDB.rawQuery("SELECT First, Second FROM meetDay;", null);
+        if(cursor.getCount() != 0) {
+            cursor.moveToNext();
+            String strTv1 = cursor.getString(0);
+            String strTv2 = cursor.getString(1);
+            tv1.setText(strTv1);
+            tv2.setText(strTv2);
+        }
+
         return view;
     }
 
@@ -235,8 +263,11 @@ public class FragmentMain extends Fragment {
     }
 
     private void datePickerAddAniv() {
+
         sqlDB = myDBHelper.getWritableDatabase();
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
+
+
 
         long calDate;
         String whenDay;

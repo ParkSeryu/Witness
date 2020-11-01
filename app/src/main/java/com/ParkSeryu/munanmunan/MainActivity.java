@@ -5,9 +5,16 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     static int flag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.vpPager);
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
         viewPager.setCurrentItem(1);
+
+
+
     }
 
     public void replaceFragment() {
