@@ -1,6 +1,7 @@
 package com.ParkSeryu.munanmunan;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -24,6 +25,15 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.common.IntentSenderForResultStarter;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.Task;
+
+import org.w3c.dom.Document;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +41,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import static android.content.ContentValues.TAG;
 
 public class FragmentMain extends Fragment {
 
@@ -57,6 +69,7 @@ public class FragmentMain extends Fragment {
     private long calDateDays;
     static int dialogOk, position;
     private AdView mAdView;
+    AppUpdateManager appUpdateManager;
 
     // 리사이클러뷰에 표시할 데이터 리스트 생성.
     ArrayList<AnniversaryListItem> mList = new ArrayList<>();
@@ -69,13 +82,13 @@ public class FragmentMain extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
 
         MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
             @Override
@@ -87,7 +100,6 @@ public class FragmentMain extends Fragment {
         mAdView = view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
 
 
         btnGoBcl = view.findViewById(R.id.goBcl);
@@ -147,8 +159,8 @@ public class FragmentMain extends Fragment {
         } else {
             try {
                 datePickerSetDate();
-            }catch(Exception e){
-                Log.d("Exception","Exception");
+            } catch (Exception e) {
+                Log.d("Exception", "Exception");
             }
         }
 
@@ -244,7 +256,7 @@ public class FragmentMain extends Fragment {
 
         sqlDB = myDBHelper.getWritableDatabase();
         cursor = sqlDB.rawQuery("SELECT First, Second FROM meetDay;", null);
-        if(cursor.getCount() != 0) {
+        if (cursor.getCount() != 0) {
             cursor.moveToNext();
             String strTv1 = cursor.getString(0);
             String strTv2 = cursor.getString(1);
@@ -270,7 +282,6 @@ public class FragmentMain extends Fragment {
 
         sqlDB = myDBHelper.getWritableDatabase();
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
-
 
 
         long calDate;
