@@ -55,7 +55,7 @@ public class SplashActivity extends Activity {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
-
+/*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -66,5 +66,5 @@ public class SplashActivity extends Activity {
                 finish();
             }
         }
-    }
+    }*/
 }
