@@ -170,7 +170,7 @@
         ads:layout_constraintRight_toRightOf="parent"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-8493260801911544/2297247311"
+        ads:adUnitId="ca-app-pub-8493260801911544/7146404843"
          >
     </com.google.android.gms.ads.AdView>
     <androidx.constraintlayout.widget.Guideline

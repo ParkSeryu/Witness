@@ -263,7 +263,7 @@ public class FragmentMain extends Fragment {
             tv1.setText(strTv1);
             tv2.setText(strTv2);
         }
-
+        updateDate();
         return view;
     }
 
@@ -276,6 +276,34 @@ public class FragmentMain extends Fragment {
         item.setDday(Dday);
 
         mList.add(item);
+    }
+
+    private void updateDate(){
+        long calDate;
+        String Dday;
+
+        sqlDB = myDBHelper.getWritableDatabase();
+        cursor = sqlDB.rawQuery("SELECT whenDay from anniversary_user;", null);
+        while(cursor.moveToNext()){
+            Date cal = new Date(calendarAni.getTimeInMillis());
+            calDate = currentDate.getTime() - cal.getTime();
+            calDateDays = calDate / (24 * 60 * 60 * 1000);
+            if (currentDate.getTime() > cal.getTime()) {
+                Dday = "D+";
+            } else
+                Dday = "D-";
+            calDateDays = calDate / (24 * 60 * 60 * 1000);
+            calDateDays = Math.abs(calDateDays);
+            Dday += calDateDays;
+            if (calDate == 0)
+                Dday = "D-DAY";
+
+            Date time = new Date();
+            String currentTime = simpleDateFormatdetail.format(time);
+            String tempDay = cursor.getString(0);
+            sqlDB.execSQL("UPDATE anniversary_user SET Dday = '" + Dday + "'WHERE whenDay ='" + tempDay + "';)");
+
+        }
     }
 
     private void datePickerAddAniv() {
