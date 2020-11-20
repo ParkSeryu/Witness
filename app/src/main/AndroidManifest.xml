@@ -17,7 +17,7 @@
         <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-8493260801911544~4923410656"/>
+            android:value="ca-app-pub-3814337593721451~4016822393" />
         <!-- 스플래시 액티비티 -->
         <activity
             android:name="com.ParkSeryu.munanmunan.SplashActivity"

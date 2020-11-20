@@ -1,7 +1,6 @@
 package com.ParkSeryu.munanmunan;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,15 +23,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
-import com.google.android.play.core.common.IntentSenderForResultStarter;
-import com.google.android.play.core.install.model.AppUpdateType;
-import com.google.android.play.core.install.model.UpdateAvailability;
-import com.google.android.play.core.tasks.Task;
-
-import org.w3c.dom.Document;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,8 +31,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import static android.content.ContentValues.TAG;
 
 public class FragmentMain extends Fragment {
 
@@ -263,7 +251,7 @@ public class FragmentMain extends Fragment {
             tv1.setText(strTv1);
             tv2.setText(strTv2);
         }
-        updateDate();
+
         return view;
     }
 
@@ -278,14 +266,15 @@ public class FragmentMain extends Fragment {
         mList.add(item);
     }
 
-    private void updateDate(){
+    private void updateDate() throws ParseException {
         long calDate;
         String Dday;
 
         sqlDB = myDBHelper.getWritableDatabase();
         cursor = sqlDB.rawQuery("SELECT whenDay from anniversary_user;", null);
-        while(cursor.moveToNext()){
-            Date cal = new Date(calendarAni.getTimeInMillis());
+        while (cursor.moveToNext()) {
+            String whenDay = cursor.getString(0);
+            Date cal = simpleDateFormatAnniv.parse(whenDay);
             calDate = currentDate.getTime() - cal.getTime();
             calDateDays = calDate / (24 * 60 * 60 * 1000);
             if (currentDate.getTime() > cal.getTime()) {
@@ -298,12 +287,11 @@ public class FragmentMain extends Fragment {
             if (calDate == 0)
                 Dday = "D-DAY";
 
-            Date time = new Date();
-            String currentTime = simpleDateFormatdetail.format(time);
             String tempDay = cursor.getString(0);
             sqlDB.execSQL("UPDATE anniversary_user SET Dday = '" + Dday + "'WHERE whenDay ='" + tempDay + "';)");
-
         }
+
+
     }
 
     private void datePickerAddAniv() {
@@ -546,6 +534,11 @@ public class FragmentMain extends Fragment {
 
     public void setRecyclerView() {
         mList.clear();
+        try {
+            updateDate();
+        } catch (Exception e) {
+            Log.e("error", "updateDate오류");
+        }
         cursor = sqlDB.rawQuery("SELECT * FROM anniversary Union SELECT WhatDay, WhenDay, Dday FROM anniversary_user order by WhenDay;", null);
         while (cursor.moveToNext()) {
             addItem(cursor.getString(0), cursor.getString(1), cursor.getString(2));
