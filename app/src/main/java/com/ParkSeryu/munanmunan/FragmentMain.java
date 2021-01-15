@@ -426,14 +426,14 @@ public class FragmentMain extends Fragment {
     }
 
     private void datePickerSetDate() {
-
+        Log.d("test", sStart + "/" + sCurrent);
         long calDate;
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
         cursor.moveToLast();
         sStart = cursor.getString(0);
         sYear = String.valueOf(calendar.get(Calendar.YEAR));
         if ((calendar.get(Calendar.MONTH) + 1) < 10) {
-            sMonth = "0" + calendar.get(Calendar.MONTH) + 1;
+            sMonth = "0" + (calendar.get(Calendar.MONTH) + 1);
         } else
             sMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
 
@@ -443,12 +443,14 @@ public class FragmentMain extends Fragment {
             sDay = String.valueOf(calendar.get(Calendar.DATE));
 
         sCurrent = sYear + sMonth + sDay;
+
+        Log.d("test123", sYear + "/" + sMonth + "/" + sDay);
         Log.d("test", sStart + "/" + sCurrent);
         try {
             currentDate = simpleDateFormat.parse(sCurrent);
             startDate = simpleDateFormat.parse(sStart);
             calDate = currentDate.getTime() - startDate.getTime();
-
+            Log.d("test111", currentDate + " / " + startDate);
             calDateDays = calDate / (24 * 60 * 60 * 1000);
             calDateDays = Math.abs(calDateDays);
             Log.d("test1", calDateDays + "");
