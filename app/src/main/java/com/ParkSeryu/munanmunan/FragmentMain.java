@@ -23,8 +23,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.play.core.appupdate.AppUpdateManager;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,7 +55,6 @@ public class FragmentMain extends Fragment {
     private long calDateDays;
     static int dialogOk, position;
     private AdView mAdView;
-    AppUpdateManager appUpdateManager;
 
     // 리사이클러뷰에 표시할 데이터 리스트 생성.
     ArrayList<AnniversaryListItem> mList = new ArrayList<>();
@@ -298,7 +295,6 @@ public class FragmentMain extends Fragment {
 
         sqlDB = myDBHelper.getWritableDatabase();
         cursor = sqlDB.rawQuery("SELECT startDay from meetDay;", null);
-
 
         long calDate;
         String whenDay;
