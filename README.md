@@ -22,8 +22,8 @@ DB : Sqlite
 ## 플레이스토어 등록 현황
 [[위트니스 다운로드](https://play.google.com/store/apps/details?id=com.ParkSeryu.munanmunan&hl=ko)]
 
-<img width="35%" height="600px" src="https://github.com/ParkSeryu/Witness/assets/64573353/e90ff767-a7bf-4a52-976d-0bff0a4f40de"/>
-<img width="35%" height="600px" src="https://github.com/ParkSeryu/Witness/assets/64573353/d2b2988e-cc7d-47ce-8719-0bd022b88d71"/>
+<img width="38%" height="600px" src="https://github.com/ParkSeryu/Witness/assets/64573353/e90ff767-a7bf-4a52-976d-0bff0a4f40de"/>
+<img width="38%" height="600px" src="https://github.com/ParkSeryu/Witness/assets/64573353/d2b2988e-cc7d-47ce-8719-0bd022b88d71"/>
 
 <br>
 
